@@ -23,12 +23,11 @@ exports.createUser = (req, res, next) => {
           .then(user => {
             const normalizedUser = {};
 
-            // Remove password from user data.
-            user = user._doc
+            user = user._doc;
 
             for (let key in user) {
               if (user.hasOwnProperty(key) && key !== 'password') {
-                normalizedUser[key] = user[key]
+                normalizedUser[key] = user[key];
               }
             }
 

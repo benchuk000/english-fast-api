@@ -6,6 +6,7 @@ const _ = require('lodash');
 
 exports.createTest = (req, res, next) => {
   let body = req.body;
+  const test = new Test(body);
 
   test.save()
     .then(savedTest => {
@@ -56,25 +57,30 @@ exports.completeTestById = (req, res, next) => {
 
   Test.findById(id).populate('questions').exec()
     .then(test => {
-      const result = body.answers.map((answer, answerIndex) => ({
-        trueAnswer: test.questions[answerIndex].trueAnswer,
-        isCorrect: _.isEqual(test.questions[answerIndex].trueAnswer, answer)
-      }));
-
-      let response = {
-        testId: test._id,
-        result
-      };
-
       if (test.isSkillsTest) {
         User.findById(req.user._id).exec()
           .then(user => {
-            // TODO: colculate user skills
+            const result = Object.keys(body.answers).map(questionId => {
+              const trueAnswer = _.find(test.questions, (question) => question._id.equals(questionId)).trueAnswer;
 
-            res.send(response);
+              return {
+                question: questionId,
+                isCorrect: _.isEqual(trueAnswer, body.answers[questionId]),
+                trueAnswer,
+                userAnswer: body.answers[questionId]
+              }
+            });
+
+            const response = {
+              testId: test._id,
+              result
+            };
+
+            req.body = response;
+
+            next();
           })
-          .catch(err > next(err));
-        user
+          .catch(err => next(err));
       }
     })
     .catch(err => next(err));

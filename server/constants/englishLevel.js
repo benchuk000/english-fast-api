@@ -1,5 +1,5 @@
 module.exports = {
   ELEMENTARY: 'elementary',
-  PRE_INTERMEDIATE:  'pre_intermediate',
+  PRE_INTERMEDIATE:  'pre-intermediate',
   INTERMEDIATE: 'intermediate'
 }

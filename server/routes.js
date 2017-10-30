@@ -16,13 +16,14 @@ router.post('/signin', auth.signIn);
 router.post('/signup', user.createUser);
 
 const test = require('./controllers/test');
+const history = require('./controllers/history');
 router.get('/test', test.getTests);
 router.get('/test/:id', test.getTestById);
 router.post('/test', test.createTest);
 router.put('/test/:id', test.updateTestById);
 router.delete('/test/:id', test.deleteTestById);
 router.get('/skills-test', test.getSkillsTest);
-router.post('/complete/test/:id', test.completeTestById);
+router.post('/complete/test/:id', test.completeTestById, history.createHistory);
 
 const question = require('./controllers/question');
 router.get('/question', question.getQuestions);

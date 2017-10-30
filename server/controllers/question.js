@@ -4,6 +4,7 @@ const Question = require('../models/question');
 
 exports.createQuestion = (req, res, next) => {
   let body = req.body;
+  const question = new Question(body);
 
   question.save()
     .then(savedQuestion => res.send(savedQuestion))

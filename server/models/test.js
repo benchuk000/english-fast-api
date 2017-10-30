@@ -11,6 +11,6 @@ const testSchema = new mongoose.Schema({
     TEST_TYPE.MULTI_CHOICE, 
     TEST_TYPE.DRAG_AND_DROP
   ]}
-});
+}, { timestamps: true });
 
 module.exports = mongoose.model('Test', testSchema);

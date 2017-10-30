@@ -15,7 +15,7 @@ app.use(
   jwt({ 
     secret: config.JWT_SECRET 
   })
-    .unless({ path: [ '/signin', 'signup' ] })
+    .unless({ path: [ '/signin', '/signup' ] })
 );
 
 app.use(require('./routes'));
