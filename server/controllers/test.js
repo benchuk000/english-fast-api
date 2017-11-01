@@ -29,7 +29,7 @@ exports.getTests = (req, res, next) => {
 exports.getTestById = (req, res, next) => {
   let id = req.params.id;
 
-  Test.find({ _id: id }).populate('questions').exec()
+  Test.findById(id).populate('questions').exec()
     .then(test => res.send(test))
     .catch(err => next(err))
 };
