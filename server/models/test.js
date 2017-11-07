@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const config = require('../config');
-const TEST_TYPE = require('../constants/testType');
+const TEST_TYPE = require('../constants/answerType');
 
 const testSchema = new mongoose.Schema({
   questions:  [ { type: mongoose.Schema.Types.ObjectId, ref: 'Question', unique: true } ],

@@ -22,7 +22,7 @@ exports.getQuestions = (req, res, next) => {
 exports.getQuestionById = (req, res, next) => {
   let id = req.params.id;
 
-  Question.find({ _id: id }).exec()
+  Question.findById(id).exec()
     .then(question => res.send(question))
     .catch(err => next(err))
 };

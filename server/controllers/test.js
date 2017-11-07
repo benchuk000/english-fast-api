@@ -61,12 +61,19 @@ exports.completeTestById = (req, res, next) => {
         User.findById(req.user._id).exec()
           .then(user => {
             const result = Object.keys(body.answers).map(questionId => {
-              const trueAnswer = _.find(test.questions, (question) => question._id.equals(questionId)).trueAnswer;
+              const question = _.find(test.questions, question => question._id.equals(questionId));
+              const answers = question.answers;
+              const trueAnswer = [];
+
+              for (let index = 0; index < answers.length; index++) {
+                if (answers[index].isCorrect) {
+                  trueAnswer.push(index);
+                }
+              }
 
               return {
                 question: questionId,
                 isCorrect: _.isEqual(trueAnswer, body.answers[questionId]),
-                trueAnswer,
                 userAnswer: body.answers[questionId]
               }
             });

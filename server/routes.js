@@ -23,7 +23,7 @@ router.post('/test', test.createTest);
 router.put('/test/:id', test.updateTestById);
 router.delete('/test/:id', test.deleteTestById);
 router.get('/skills-test', test.getSkillsTest);
-router.post('/complete/test/:id', test.completeTestById, history.createHistory);
+router.post('/complete/test/:id', test.completeTestById, history.createHistory, user.updateUserSkills);
 
 const question = require('./controllers/question');
 router.get('/question', question.getQuestions);

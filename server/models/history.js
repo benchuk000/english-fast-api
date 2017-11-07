@@ -26,10 +26,11 @@ HistorySchema.pre('save', function (next) {
 
         Object.keys(groupedQestionsByLevelAndType).forEach(level => 
           Object.keys(groupedQestionsByLevelAndType[level]).forEach(type => {
-            const questionsGroupedById = _.groupBy(_.filter(questions, { level: level, type: type }), '_id');
+            const questionsByLevelAndType = _.filter(questions, { level: level, type: type });
+            const questionsGroupedById = _.groupBy(questionsByLevelAndType, '_id');
             const correctQuestions = _.filter(entity.questions, (item) => questionsGroupedById[item.question._id] && item.isCorrect);
-
-            groupedQestionsByLevelAndType[level][type] = parseInt(correctQuestions.length * 100 / Object.keys(questions).length);
+            
+            groupedQestionsByLevelAndType[level][type] = parseInt(correctQuestions.length * 100 / questionsByLevelAndType.length);
           })
         );
 

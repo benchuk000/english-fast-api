@@ -11,6 +11,6 @@ exports.createHistory = (req, res, next) => {
   });
 
   history.save()
-    .then(() => res.send(body))
+    .then(() => next())
     .catch(err => next(err))
 };
