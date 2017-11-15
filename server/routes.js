@@ -4,6 +4,7 @@ const multipart = require('connect-multiparty');
 const multipartMiddleware = multipart();
 
 const user = require('./controllers/user');
+router.get('/user/articles', user.getUserArticles);
 router.get('/user', user.getUsers);
 router.get('/user/:id', user.getUserById);
 router.post('/user', user.createUser);
@@ -31,5 +32,12 @@ router.get('/question/:id', question.getQuestionById);
 router.post('/question', question.createQuestion);
 router.put('/question/:id', question.updateQuestionById);
 router.delete('/question/:id', question.deleteQuestionById);
+
+const article = require('./controllers/article');
+router.get('/article', article.getArticles);
+router.get('/article/:id', article.getArticleById);
+router.post('/article', article.createArticle);
+router.put('/article/:id', article.updateArticleById);
+router.delete('/article/:id', article.deleteArticleById);
 
 module.exports = router;

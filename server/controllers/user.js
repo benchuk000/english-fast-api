@@ -1,5 +1,6 @@
 const User = require('../models/user');
 const History = require('../models/history');
+const Article = require('../models/article');
 const AVERAGE_PERCENT_THRESHOLD = require('../constants/averagePercentThreshold');
 const LEVEL_PRIORITY = require('../constants/levelPriority');
 
@@ -92,14 +93,6 @@ exports.updateUserSkills = (req, res, next) => {
           });
         });
 
-        console.log('====================================');
-        console.log(result);
-        console.log('====================================');
-
-        console.log('====================================');
-        console.log(resultCount);
-        console.log('====================================');
-
         const averageResult = {};
         Object.keys(result).forEach(level => {
           Object.keys(result[level]).forEach(type => {
@@ -108,10 +101,6 @@ exports.updateUserSkills = (req, res, next) => {
             });
           });
         });
-
-        console.log('====================================');
-        console.log(averageResult);
-        console.log('====================================');
 
         const passingLevel = {};
         Object.keys(averageResult).forEach(level => {
@@ -145,6 +134,91 @@ exports.updateUserSkills = (req, res, next) => {
       .catch(err => next(err));
     })
     .catch(err => next(err))
+};
+
+exports.getUserArticles = (req, res, next) => {
+  let id = req.user._id;
+
+  User.findById(id).exec()
+    .then(user => {
+      History.aggregate([
+        { 
+          $match: { user: user._id }
+        },
+        { 
+          $unwind: '$questions',
+        },
+        {
+          $lookup: {
+            from: 'questions',
+            localField: 'questions.question',
+            foreignField: '_id',
+            as: 'questions.entity'
+          }
+        },
+        {
+          $project: {
+            questions: {
+              entity: { 
+                $arrayElemAt: [ '$questions.entity', 0 ],
+              },
+              isCorrect: '$questions.isCorrect',
+            },
+          }
+        },
+        {
+          $project: {
+            question: {
+              _id: '$questions.entity._id',
+              isCorrect: '$questions.isCorrect',
+              theme: '$questions.entity.theme',
+              level: '$questions.entity.level',
+            }
+          }
+        },
+        { 
+          $match: { 
+            'question.level': user.level,
+          }
+        },
+        {
+          $group: {
+            _id: '$question.theme',
+            amount: {
+              $sum: 1
+            },
+            correctCount: {
+              $sum: {
+                $cond: [ '$question.isCorrect', 1, 0 ],
+              },
+            }
+          }
+        },
+        {
+          $project: {
+            theme: '$_id',
+            value: {
+              $divide: [ '$correctCount', '$amount' ]
+            }
+          }
+        },
+        {
+          $sort: { value:  1 }
+        },
+        {
+          $limit: 3
+        }
+      ]).exec()
+        .then(result => {
+          Article.find({ theme: { $in: result.map(item => item.theme) }})
+            .limit(3)
+            .exec()
+            .then(articles => res.send(articles))
+            .catch(err => next(arr));
+        })
+        .catch(err => next(err));
+    })
+    .catch(err => next(err));
 };
 
 exports.deleteUserById = (req, res, next) => {

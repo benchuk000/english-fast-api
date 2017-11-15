@@ -20,6 +20,7 @@ HistorySchema.pre('save', function (next) {
         const questions = entity.questions.map(item => item.question);
         const groupedQestionsByLevel = _.groupBy(questions, 'level');
         const groupedQestionsByLevelAndType = {};
+        const groupedThemesByLevelAndType = {};
         Object.keys(groupedQestionsByLevel).forEach(key =>
           groupedQestionsByLevelAndType[key] = _.groupBy(groupedQestionsByLevel[key], 'type')
         );
