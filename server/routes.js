@@ -18,13 +18,9 @@ router.post('/signup', user.createUser);
 
 const test = require('./controllers/test');
 const history = require('./controllers/history');
-router.get('/test', test.getTests);
-router.get('/test/:id', test.getTestById);
-router.post('/test', test.createTest);
-router.put('/test/:id', test.updateTestById);
-router.delete('/test/:id', test.deleteTestById);
 router.get('/skills-test', test.getSkillsTest);
-router.post('/complete/test/:id', test.completeTestById, history.createHistory, user.updateUserSkills);
+router.post('/generate/test', test.generateTest);
+router.post('/complete/test', test.completeTest, history.createHistory, user.updateUserSkills);
 
 const question = require('./controllers/question');
 router.get('/question', question.getQuestions);
