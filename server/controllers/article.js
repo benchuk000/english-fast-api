@@ -31,7 +31,7 @@ exports.updateArticleById = (req, res, next) => {
   let id = req.params.id;
   let body = req.body;
 
-  Article.findByIdAndUpdate(id, { $set: body }).exec()
+  Article.findByIdAndUpdate(id, { $set: body }, { new: true }).exec()
     .then(updatedArticle => res.send(updatedArticle))
     .catch(err => next(err));
 }

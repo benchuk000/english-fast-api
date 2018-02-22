@@ -31,7 +31,7 @@ exports.updateQuestionById = (req, res, next) => {
   let id = req.params.id;
   let body = req.body;
 
-  Question.findByIdAndUpdate(id, { $set: body }).exec()
+  Question.findByIdAndUpdate(id, { $set: body }, { new: true }).exec()
     .then(updatedQuestion => res.send(updatedQuestion))
     .catch(err => next(err));
 }

@@ -3,8 +3,7 @@ const config = require('../config');
 
 const articleSchema = new mongoose.Schema({
   name: { type: String, required: true },
-  theme: { type: String, required: true }, // TODO: Add topics enum.
-  avatarUrl: { type: String },
+  theme: { type: String, required: true }, 
   content: { type: String, required: true }
 }, { timestamps: true });
 

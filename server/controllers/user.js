@@ -126,6 +126,8 @@ exports.updateUserSkills = (req, res, next) => {
         user.level = level;
         user.skills = averageResult[level];
 
+        console.log(user.level, user.skills);
+
         user.save();
 
         // next(req.body);
@@ -203,13 +205,14 @@ exports.getUserArticles = (req, res, next) => {
           }
         },
         {
-          $sort: { value:  1 }
+          $sort: { value: 1 }
         },
         {
           $limit: 3
         }
       ]).exec()
         .then(result => {
+          console.log(result);
           Article.find({ theme: { $in: result.map(item => item.theme) }})
             .limit(3)
             .exec()
